@@ -129,5 +129,65 @@ Reduce transfers, synch, launch overhead, serial setup
 
 GPU Programming is typically Data Parallelism 
 
+### CUDA program coordinates two processors and two memory spaces 
+
+**HOST - CPU**
+- Runs sequential control and launches work 
+
+**Device - GPU** 
+- RUns many parallel threads 
+- In the explicit-memory model, data must be moved between host and device memory
+
+The CPU and GPU have separate memories and cannot access each others' memories 
+^ Also caveat there is an advanced feature in modern systems that can
+
+### First CUDA program follows a five-stage lifecycle 
+1. Allocate device memory 
+2. Copy inputs host -> device 
+3. Launch the computation **kernel** on the GPU
+4. Copy results device -> host 
+5. Free device memory 
+- Correctness requires every stage 
+
+### cudaMalloc and cudaFree 
+
+- `cudaMalloc` receives the address of a device pointer and a size in bytes.
+- `cudaFree` releases the device allocation 
+- Always calculate bytes explicityly: N * size(elements type)
+
+```cu 
+size_t bytes = N * sizeof(float);
+
+cudaMalloc((void**)&x_d, bytes);
+
+// use x_d on the device 
+
+cudaFree(x_d)
+```
 
 
+```cu 
+// Actual Function Signature 
+cudaError_t cudaMalloc(void **devPtr, size_t size)
+```
+
+- devPtr: Pointer to pointer to allocated device memory 
+- size: requested allocation size in bytes 
+Typical errors could be OOM errors 
+
+```cu 
+cudaError_t cudaFree(void *devPtr)
+```
+- devPtr: Pointer to device memory to free 
+If your code is complex then double free could happen
+
+```cu 
+cudaMemcpy(destination, source, byte count, direction)
+```
+
+- HostToDevice copies input to the GPU 
+- DeviceToHost return results to the CPU 
+
+Some current research is how to balance/partition to help with parallelism 
+
+There is a hierarchy to be able to scale. 
