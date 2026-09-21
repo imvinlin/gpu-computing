@@ -17,7 +17,7 @@ make report # full report with env + all tests + sanitizer and saves result to r
 ```
 
 ## Evidence that the GPU result matches the CPU reference
-- The output for both the GPU and CPU were compared element by element with the 1e-5 tolerance.
+- The output for both the GPU and CPU were compared element by element with the 1e-5 tolerance
 - Multithreaded CPU output is checked in the same way 
 - All test sizes passed
 - Compute Sanitizer memcheck showed 0 errors for HiperGator
@@ -276,5 +276,4 @@ GPU kernel rest (avg 10): 0.023 ms
 GPU application:          0.601 ms (copies and first kernel)
 ========= ERROR SUMMARY: 2 errors
 make[1]: *** [Makefile:23: sanitize] Error 1
-```
 ```
